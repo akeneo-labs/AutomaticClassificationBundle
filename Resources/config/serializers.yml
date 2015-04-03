@@ -1,0 +1,27 @@
+parameters:
+    pimee_automatic_classification.denormalizer.product_rule.add_category_action.class: PimEnterprise\Bundle\AutomaticClassificationBundle\Denormalizer\ProductRule\AddCategoryActionDenormalizer
+
+services:
+    pimee_catalog_rule.denormalizer.product_rule.chained:
+        class: %pimee_catalog_rule.denormalizer.product_rule.chained.class%
+        calls:
+            - [addDenormalizer, ['@pimee_catalog_rule.denormalizer.product_rule.condition']]
+            - [addDenormalizer, ['@pimee_catalog_rule.denormalizer.product_rule.set_value_action']]
+            - [addDenormalizer, ['@pimee_catalog_rule.denormalizer.product_rule.copy_value_action']]
+            - [addDenormalizer, ['@pimee_automatic_classification.denormalizer.product_rule.add_category_action']]
+            - [addDenormalizer, ['@pimee_catalog_rule.denormalizer.product_rule.content']]
+            - [addDenormalizer, ['@pimee_catalog_rule.denormalizer.product_rule']]
+
+    pimee_catalog_rule.denormalizer.product_rule.content:
+        class: %pimee_catalog_rule.denormalizer.product_rule.content.class%
+        arguments:
+            - %akeneo_rule_engine.model.rule.class%
+            - %pimee_catalog_rule.model.product_condition.class%
+            - copy_value: %pimee_catalog_rule.model.copy_value_action.class%
+              set_value: %pimee_catalog_rule.model.set_value_action.class%
+              add_category: %pimee_automatic_classification.model.add_category_action.class%
+
+    pimee_automatic_classification.denormalizer.product_rule.add_category_action:
+        class: %pimee_automatic_classification.denormalizer.product_rule.add_category_action.class%
+        arguments:
+            - %pimee_automatic_classification.model.add_category_action.class%

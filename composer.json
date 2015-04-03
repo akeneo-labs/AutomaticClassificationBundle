@@ -1,0 +1,33 @@
+{
+    "name": "akeneo/automatic-classification-bundle",
+    "type": "symfony-bundle",
+    "description": "Akeneo PIM Enterprise bundle to automatically classify products with the rule engine",
+    "keywords": ["pim", "akeneo", "ecommerce", "automatic", "classification", "rules"],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name":     "Akeneo",
+            "homepage": "http://www.akeneo.com/"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/akeneo/pim-enterprise-dev.git"
+        }
+    ],
+    "require": {
+        "akeneo/pim-enterprise-dev": "~1.3@stable"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.*@dev"
+    },
+    "autoload": {
+        "psr-0": { "Pim\\Bundle\\AutomaticClassificationBundle\\": "" }
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev",
+    "target-dir": "PimEnterprise/Bundle/AutomaticClassificationBundle"
+}

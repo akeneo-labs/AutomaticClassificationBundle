@@ -1,0 +1,10 @@
+parameters:
+    pimee_catalog_rule.applier.product.updater.class: PimEnterprise\Bundle\AutomaticClassificationBundle\Engine\ProductRuleApplier\ProductsUpdater
+
+services:
+    pimee_catalog_rule.applier.product.updater:
+            class: %pimee_catalog_rule.applier.product.updater.class%
+            arguments:
+                - '@pim_catalog.updater.product'
+                - '@pim_catalog.updater.product_template'
+                - '@pim_catalog.repository.category'
