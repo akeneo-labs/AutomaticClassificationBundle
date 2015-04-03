@@ -28,7 +28,7 @@ Then clean the cache:
 This bundle is an extension of the CatalogRuleBundle, so it uses the same conditions, and add a new set of actions:
 
 * `add_category`: add a product to a category,
-* (more to come soon).
+* `set_category`: add a product to a category and remove it from all other category.
 
 For both `add_category` and `set_category` actions, the category must exists, or the rule will not apply.
 

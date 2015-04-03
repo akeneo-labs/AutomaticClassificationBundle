@@ -2,34 +2,34 @@
 
 namespace PimEnterprise\Bundle\AutomaticClassificationBundle\Denormalizer\ProductRule;
 
-use PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductAddCategoryActionInterface;
+use PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductSetCategoryActionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
- * Denormalize product add category rule actions.
+ * Denormalize product set category rule actions.
  *
  * @author    Damien Carcel (https://github.com/damien-carcel)
  * @copyright 2015 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class AddCategoryActionDenormalizer implements DenormalizerInterface
+class SetCategoryActionDenormalizer implements DenormalizerInterface
 {
     /** @var string */
-    protected $addCategoryActionClass;
+    protected $setCategoryActionClass;
 
     /**
-     * @param string $addCategoryActionClass
+     * @param string $setCategoryActionClass
      */
-    public function __construct($addCategoryActionClass)
+    public function __construct($setCategoryActionClass)
     {
-        $this->addCategoryActionClass = $addCategoryActionClass;
+        $this->setCategoryActionClass = $setCategoryActionClass;
     }
     /**
      * {@inheritdoc}
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        return new $this->addCategoryActionClass($data);
+        return new $this->setCategoryActionClass($data);
     }
 
     /**
@@ -37,8 +37,8 @@ class AddCategoryActionDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === $this->addCategoryActionClass &&
+        return $type === $this->setCategoryActionClass &&
             isset($data['type']) &&
-            ProductAddCategoryActionInterface::ACTION_TYPE === $data['type'];
+            ProductSetCategoryActionInterface::ACTION_TYPE === $data['type'];
     }
 }
