@@ -28,11 +28,11 @@ Then clean the cache:
 This bundle is an extension of the CatalogRuleBundle, so it uses the same conditions, and add a new set of actions:
 
 * `add_category`: add a product to a category,
-* `set_category`: add a product to a category and remove it from all other category.
+* `set_category`: add a product to a category and remove it from all other category. If you set the category code to `null`, it will declassify the product.
 
 For both `add_category` and `set_category` actions, the category must exists, or the rule will not apply.
 
-### Example
+### Examples
 
     rules:
         camera_add_canon_brand_category:
@@ -46,6 +46,31 @@ For both `add_category` and `set_category` actions, the category must exists, or
                   value:    Canon
             actions:
                 - type:         add_category
-                  categoryCode: canon_category
+                  categoryCode: category_canon
+        player_set_philips_brand_category:
+            conditions:
+                - field:    family.code
+                  operator: IN
+                  value:
+                    - camcorders
+                    - mp3_players
+                - field:    name
+                  operator: CONTAINS
+                  value:    Philips
+            actions:
+                - type:         set_category
+                  categoryCode: category_philips
+        mug_remove_oro_brand_category:
+            conditions:
+                - field:    family.code
+                  operator: IN
+                  value:
+                    - mugs
+                - field:    name
+                  operator: CONTAINS
+                  value:    Oro
+            actions:
+                - type:         set_category
+                  categoryCode: null
 
 Take a look to [icecat_demo_dev rule fixtures](https://github.com/akeneo/pim-enterprise-dev/blob/1.3/src/PimEnterprise/Bundle/InstallerBundle/Resources/fixtures/icecat_demo_dev/rules.yml) to see more examples of conditions.

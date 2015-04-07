@@ -82,7 +82,7 @@ class ProductsUpdater extends BaseProductsUpdater
     {
         foreach ($products as $product) {
             $category = $this->categoryRepository->findOneByIdentifier($action->getCategoryCode());
-            if ($category) {
+            if (null !== $category) {
                 $product->addCategory($category);
             }
         }
@@ -101,14 +101,16 @@ class ProductsUpdater extends BaseProductsUpdater
     protected function applySetCategoryAction(array $products, ProductSetCategoryActionInterface $action)
     {
         foreach ($products as $product) {
-            $newCategory = $this->categoryRepository->findOneByIdentifier($action->getCategoryCode());
-            if ($newCategory) {
-                $previousCategories = $product->getCategories();
-                foreach ($previousCategories as $category) {
-                    $product->removeCategory($category);
-                }
+            $previousCategories = $product->getCategories();
+            foreach ($previousCategories as $category) {
+                $product->removeCategory($category);
+            }
 
-                $product->addCategory($newCategory);
+            if (null !== $action->getCategoryCode()) {
+                $newCategory = $this->categoryRepository->findOneByIdentifier($action->getCategoryCode());
+                if (null !== $newCategory) {
+                    $product->addCategory($newCategory);
+                }
             }
         }
 

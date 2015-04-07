@@ -147,6 +147,27 @@ class ProductsUpdaterSpec extends ObjectBehavior
         $this->update($rule, [$product]);
     }
 
+    function it_declassifies_product_when_the_rule_has_an_set_category_action_without_category_code(
+        $templateUpdater,
+        CategoryInterface $currentCategory,
+        RuleInterface $rule,
+        ProductInterface $product,
+        ProductSetCategoryActionInterface $action
+    ){
+        $action->getCategoryCode()->willReturn(null);
+        $rule->getActions()->willReturn([$action]);
+
+        $product->getCategories()->willReturn([$currentCategory]);
+        $product->removeCategory($currentCategory)->shouldBeCalled();
+        $product->addCategory(Argument::any())->shouldNotBeCalled();
+
+        $product->getVariantGroup()->willReturn(null);
+        $templateUpdater->update(Argument::any(), Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->update($rule, [$product]);
+    }
+
     function it_throws_exception_when_update_a_product_with_an_unknown_action(
         RuleInterface $rule,
         ProductInterface $product
