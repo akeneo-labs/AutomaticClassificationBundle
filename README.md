@@ -8,20 +8,32 @@ A bundle that extend the Pim Enterprise CatalogRuleBundle, adding the possibilit
 
 ## Installation
 
-Install the bundle with composer:
+As the Git repository is private, you need to add it to the composer.json of your project:
+
+    "repositories": [
+            {
+                "type": "vcs",
+                "url": "https://github.com/akeneo/AutomaticClassificationBundle.git",
+                "branch": "master"
+            }
+        ]
+
+Then install the bundle with composer:
 
     $ php composer.phar require akeneo/automatic-classification-bundle:1.0.*
 
+If you want to use the development version (only for test purpose, do not use it in production), replace `1.0.*` by `dev-master` in the previous command.
+
 Enable the bundle in the `app/AppKernel.php` file, in the `getPimEnterpriseBundles` function:
 
-    `return[
+    return[
         …
-        new Pim\Bundle\MagentoConnectorBundle\PimMagentoConnectorBundle(),
-    ];`
+        new PimEnterprise\Bundle\AutomaticClassificationBundle\PimEnterpriseAutomaticClassificationBundle(),
+    ];
 
 Then clean the cache:
 
-    `php app/console cache:clear --env=prod`
+    php app/console cache:clear --env=prod
 
 ## Rule definition
 
@@ -30,7 +42,7 @@ This bundle is an extension of the CatalogRuleBundle, so it uses the same condit
 * `add_category`: add a product to a category,
 * `set_category`: add a product to a category and remove it from all other category. If you set the category code to `null`, it will declassify the product.
 
-For both `add_category` and `set_category` actions, the category must exists, or the rule will not apply.
+The category must exists, or the rule will not apply.
 
 ### Examples
 

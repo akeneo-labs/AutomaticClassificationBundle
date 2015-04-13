@@ -1,12 +1,7 @@
 <?php
 
 /*
- * This file is part of the Akeneo PIM Enterprise Edition.
- *
- * (c) 2015 Akeneo SAS (http://www.akeneo.com)
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * To be defined.
  */
 
 namespace PimEnterprise\Bundle\AutomaticClassificationBundle\Model;
@@ -17,7 +12,8 @@ use Akeneo\Bundle\RuleEngineBundle\Model\ActionInterface;
  * Add action used in product rules.
  * An add action category is used to ad a product in a category.
  *
- * @author Damien Carcel (https://github.com/damien-carcel)
+ * @author    Damien Carcel (https://github.com/damien-carcel)
+ * @copyright 2015 Akeneo SAS (http://www.akeneo.com)
  */
 interface ProductAddCategoryActionInterface extends ActionInterface
 {
