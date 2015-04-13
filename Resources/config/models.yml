@@ -1,2 +1,3 @@
 parameters:
     pimee_automatic_classification.model.add_category_action.class: PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductAddCategoryAction
+    pimee_automatic_classification.model.set_category_action.class: PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductSetCategoryAction

@@ -12,6 +12,7 @@ use Pim\Bundle\CatalogBundle\Repository\CategoryRepositoryInterface;
 use Pim\Bundle\CatalogBundle\Updater\ProductTemplateUpdaterInterface;
 use Pim\Bundle\CatalogBundle\Updater\ProductUpdaterInterface;
 use PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductAddCategoryActionInterface;
+use PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductSetCategoryActionInterface;
 use PimEnterprise\Bundle\CatalogRuleBundle\Model\ProductCopyValueActionInterface;
 use PimEnterprise\Bundle\CatalogRuleBundle\Model\ProductSetValueActionInterface;
 use Prophecy\Argument;
@@ -114,6 +115,51 @@ class ProductsUpdaterSpec extends ObjectBehavior
 
         $categoryRepository->findOneByIdentifier('categoryCode')->willReturn($category);
         $product->addCategory($category)->shouldBeCalled();
+
+        $product->getVariantGroup()->willReturn(null);
+        $templateUpdater->update(Argument::any(), Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->update($rule, [$product]);
+    }
+
+    function it_classifies_product_when_the_rule_has_an_set_category_action(
+        $templateUpdater,
+        CategoryInterface $category,
+        CategoryInterface $currentCategory,
+        CategoryRepositoryInterface $categoryRepository,
+        RuleInterface $rule,
+        ProductInterface $product,
+        ProductSetCategoryActionInterface $action
+    ){
+        $action->getCategoryCode()->willReturn('categoryCode');
+        $rule->getActions()->willReturn([$action]);
+
+        $categoryRepository->findOneByIdentifier('categoryCode')->willReturn($category);
+        $product->getCategories()->willReturn([$currentCategory]);
+        $product->removeCategory($currentCategory)->shouldBeCalled();
+        $product->addCategory($category)->shouldBeCalled();
+
+        $product->getVariantGroup()->willReturn(null);
+        $templateUpdater->update(Argument::any(), Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->update($rule, [$product]);
+    }
+
+    function it_declassifies_product_when_the_rule_has_an_set_category_action_without_category_code(
+        $templateUpdater,
+        CategoryInterface $currentCategory,
+        RuleInterface $rule,
+        ProductInterface $product,
+        ProductSetCategoryActionInterface $action
+    ){
+        $action->getCategoryCode()->willReturn(null);
+        $rule->getActions()->willReturn([$action]);
+
+        $product->getCategories()->willReturn([$currentCategory]);
+        $product->removeCategory($currentCategory)->shouldBeCalled();
+        $product->addCategory(Argument::any())->shouldNotBeCalled();
 
         $product->getVariantGroup()->willReturn(null);
         $templateUpdater->update(Argument::any(), Argument::any())

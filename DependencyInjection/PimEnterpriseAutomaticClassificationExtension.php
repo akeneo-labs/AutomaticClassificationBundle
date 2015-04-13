@@ -14,7 +14,8 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * Pim enterprise automatic classification extension
  *
- * @author Damien Carcel (https://github.com/damien-carcel)
+ * @author    Damien Carcel (https://github.com/damien-carcel)
+ * @copyright 2015 Akeneo SAS (http://www.akeneo.com)
  */
 class PimEnterpriseAutomaticClassificationExtension extends AkeneoStorageUtilsExtension
 {

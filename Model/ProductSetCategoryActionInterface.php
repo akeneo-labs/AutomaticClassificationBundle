@@ -9,15 +9,15 @@ namespace PimEnterprise\Bundle\AutomaticClassificationBundle\Model;
 use Akeneo\Bundle\RuleEngineBundle\Model\ActionInterface;
 
 /**
- * Add action used in product rules.
- * An add action category is used to ad a product in a category.
+ * Set action used in product rules.
+ * An set action category is used to place a product in only one category.
  *
  * @author    Damien Carcel (https://github.com/damien-carcel)
  * @copyright 2015 Akeneo SAS (http://www.akeneo.com)
  */
-interface ProductAddCategoryActionInterface extends ActionInterface
+interface ProductSetCategoryActionInterface extends ActionInterface
 {
-    const ACTION_TYPE = 'add_category';
+    const ACTION_TYPE = 'set_category';
 
     /**
      * @return string

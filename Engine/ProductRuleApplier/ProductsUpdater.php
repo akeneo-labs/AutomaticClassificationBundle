@@ -12,6 +12,7 @@ use Pim\Bundle\CatalogBundle\Repository\CategoryRepositoryInterface;
 use Pim\Bundle\CatalogBundle\Updater\ProductTemplateUpdaterInterface;
 use Pim\Bundle\CatalogBundle\Updater\ProductUpdaterInterface;
 use PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductAddCategoryActionInterface;
+use PimEnterprise\Bundle\AutomaticClassificationBundle\Model\ProductSetCategoryActionInterface;
 use PimEnterprise\Bundle\CatalogRuleBundle\Engine\ProductRuleApplier\ProductsUpdater as BaseProductsUpdater;
 use PimEnterprise\Bundle\CatalogRuleBundle\Model\ProductCopyValueActionInterface;
 use PimEnterprise\Bundle\CatalogRuleBundle\Model\ProductSetValueActionInterface;
@@ -19,7 +20,8 @@ use PimEnterprise\Bundle\CatalogRuleBundle\Model\ProductSetValueActionInterface;
 /**
  * Saves products when apply a rule.
  *
- * @author Damien Carcel (https://github.com/damien-carcel)
+ * @author    Damien Carcel (https://github.com/damien-carcel)
+ * @copyright 2015 Akeneo SAS (http://www.akeneo.com)
  */
 class ProductsUpdater extends BaseProductsUpdater
 {
@@ -27,7 +29,9 @@ class ProductsUpdater extends BaseProductsUpdater
     protected $categoryRepository;
 
     /**
-     * {@inheritdoc}
+     * @param ProductUpdaterInterface         $productUpdater
+     * @param ProductTemplateUpdaterInterface $templateUpdater
+     * @param CategoryRepositoryInterface     $categoryRepository
      */
     public function __construct(
         ProductUpdaterInterface $productUpdater,
@@ -52,6 +56,8 @@ class ProductsUpdater extends BaseProductsUpdater
                 $this->applyCopyAction($products, $action);
             } elseif ($action instanceof ProductAddCategoryActionInterface) {
                 $this->applyAddCategoryAction($products, $action);
+            } elseif ($action instanceof ProductSetCategoryActionInterface) {
+                $this->applySetCategoryAction($products, $action);
             } else {
                 throw new \LogicException(
                     sprintf('The action "%s" is not supported yet.', ClassUtils::getClass($action))
@@ -74,6 +80,33 @@ class ProductsUpdater extends BaseProductsUpdater
             $category = $this->categoryRepository->findOneByIdentifier($action->getCategoryCode());
             if (null !== $category) {
                 $product->addCategory($category);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Applies a set category action on a subject set, if this category exists.
+     *
+     * @param \Pim\Bundle\CatalogBundle\Model\ProductInterface[] $products
+     * @param ProductSetCategoryActionInterface                  $action
+     *
+     * @return ProductsUpdater
+     */
+    protected function applySetCategoryAction(array $products, ProductSetCategoryActionInterface $action)
+    {
+        foreach ($products as $product) {
+            $previousCategories = $product->getCategories();
+            foreach ($previousCategories as $category) {
+                $product->removeCategory($category);
+            }
+
+            if (null !== $action->getCategoryCode()) {
+                $newCategory = $this->categoryRepository->findOneByIdentifier($action->getCategoryCode());
+                if (null !== $newCategory) {
+                    $product->addCategory($newCategory);
+                }
             }
         }
 
